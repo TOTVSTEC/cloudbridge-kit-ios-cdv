@@ -76,8 +76,10 @@ class InstallTask {
 			binPath = path.join(__dirname, "libs"),
 			assetsPath = path.join(__dirname, "assets"),
 			projPath = path.join(__dirname, "prj"),
-			project = require(path.join(this.projectDir, 'package.json')),
-			projectDisplayName = project.displayName || "HelloCordova",
+			pkgData = {
+				project: require(path.join(this.projectDir, 'package.json'))
+			},
+			projectDisplayName = pkgData.project.displayName || "HelloCordova",
 			targetPath = path.join("platforms", "ios"),
 			targetSrcPath = path.join(targetPath, projectDisplayName),
 			targetBinPath = targetPath,
@@ -118,17 +120,8 @@ class InstallTask {
 			shelljs.cp("-rf", fassets[i], targetAssetsPath);
 		}
 
-		//Project
-		var fprojs = shelljs.ls(path.join(projPath, "/*"));
-		for (var i = 0; i < fprojs.length; i++) {
-			shelljs.cp("-rf", fprojs[i], targetProjPath);
-		}
-		var projFile = path.join(targetProjPath, "project.pbxproj");
-		if (shelljs.test('-e', projFile)) {
-			var content = fs.readFileSync(projFile, { encoding: 'utf8' });
-			content = content.replace(/<%= displayName %>/igm, projectDisplayName);
-			fs.writeFileSync(projFile, content);
-		}
+		//Project template
+		utils.copyTemplate(projPath, targetProjPath, pkgData, /\.(pbxproj)/);
 	}
 
 	checkForExistingFiles() {
