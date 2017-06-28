@@ -1,6 +1,6 @@
 {
   "name": "cloudbridge-kit-ios-cdv",
-  "version": "0.0.1-SNAPSHOT",
+  "version": "0.0.2-SNAPSHOT",
   "description": "A tool for creating and developing CloudBridge iOS apps.",
   "homepage": "http://www.totvs.com/",
   "keywords": [
